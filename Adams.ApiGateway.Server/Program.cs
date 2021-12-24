@@ -1,3 +1,4 @@
+using Adams.ApiGateway.Server.Auth;
 using Adams.ApiGateway.Server.Db;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -39,9 +40,9 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
-    options.AddPolicy("MemberOrAdmin", policy => policy.RequireAssertion(context =>
-        context.User.HasClaim(c => (c.Type == "Member" || c.Type == "Admin"))
+    options.AddPolicy(PolicyNames.AdminOnly, policy => policy.RequireClaim(ClaimNames.Admin));
+    options.AddPolicy(PolicyNames.MemberOrAdmin, policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(c => (c.Type == ClaimNames.Member || c.Type == ClaimNames.Admin))
         ));
 });
 

@@ -1,5 +1,4 @@
-﻿using NAVIAIServices.RepositoryService.Interfaces;
-using NAVIAIServices.StorageService;
+﻿using NAVIAIServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    internal class RestStorageService : IStorageService
+    internal class StorageService : IStorageService
     {
         public void DownloadImage(IProjectService projectService, string itemId, string imageInfoId, string downloadPath)
         {

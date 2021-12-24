@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Adams.ApiGateway.Server.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adams.ApiGateway.Server.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = PolicyNames.AdminOnly)]
     public class AuthTestController : ControllerBase
     {
         [HttpGet("authtest")]

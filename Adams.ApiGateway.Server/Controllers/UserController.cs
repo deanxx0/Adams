@@ -1,4 +1,5 @@
-﻿using Adams.ApiGateway.Server.Db;
+﻿using Adams.ApiGateway.Server.Auth;
+using Adams.ApiGateway.Server.Db;
 using Adams.ApiGateway.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,11 @@ namespace Adams.ApiGateway.Server.Controllers
         public async Task<IActionResult> Create([FromBody] UserCreateDto userCreateDto)
         {
             if (
-                userCreateDto.UserClaim != "Member" &&
-                userCreateDto.UserClaim != "Admin"
+                userCreateDto.UserClaim != ClaimNames.Admin &&
+                userCreateDto.UserClaim != ClaimNames.Member
                 )
             {
-                return BadRequest($"User Claim should be Member or Admin");
+                return BadRequest($"User Claim should be {ClaimNames.Member} or {ClaimNames.Admin}");
             }
 
             var hasher = new PasswordHasher<string>();
