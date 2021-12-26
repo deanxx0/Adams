@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    internal class ProjectService : IProjectService
+    public class ProjectService : IProjectService
     {
         private AdamsClient client;
         public ProjectService(AdamsClient client, Project entity)

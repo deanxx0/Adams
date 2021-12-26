@@ -1,33 +1,72 @@
 ﻿using NAVIAIServices;
 using NAVIAIServices.Entities;
 using System.Collections;
+using System.Net;
+using System.Net.Http.Json;
 
 namespace Adams.Client
 {
     public class ProjectCollection : ICollection<Project>
     {
-        public ProjectCollection(string asdfsda)
-        {
+        HttpClient _http;
 
+        public ProjectCollection(HttpClient http)
+        {
+            _http = http;
         }
 
-        public int Count => throw new NotImplementedException();
-
+        public int Count => GetCount();
         public bool IsReadOnly => throw new NotImplementedException();
+
+        public int GetCount()
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<int>($"/projects/count").Result;
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public void Add(Project item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res = _http.PostAsJsonAsync<Project>("/projects", item).Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res = _http.DeleteAsync("/projects").Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public bool Contains(Project item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res = _http.GetFromJsonAsync<bool>($"/projects/contains/{item.Id}").Result;
+                if (res) return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return false;
         }
 
         public void CopyTo(Project[] array, int arrayIndex)
@@ -42,7 +81,15 @@ namespace Adams.Client
 
         public bool Remove(Project item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res = _http.DeleteAsync($"/projects/{item.Id}").Result;
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
