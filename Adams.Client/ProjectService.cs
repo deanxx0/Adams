@@ -26,7 +26,7 @@ namespace Adams.Client
 
         public IDatasetService Datasets => throw new NotImplementedException();
 
-        public IInputChannelService InputChannels => throw new NotImplementedException();
+        public IInputChannelService InputChannels => new InputChannelService(_http, Entity);
 
         public IItemService Items => throw new NotImplementedException();
 

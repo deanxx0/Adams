@@ -34,10 +34,10 @@ var projectPage = adams.Projects.GetProjectPage(1).ToList();
 var projectService = Extensions.GetService(projectPage[0], adams);
 
 
-var metadatakey = new MetadataKey("m", "mm", MetadataTypes.String);
-projectService.MetadataKeys.Add(metadatakey);
-var count = projectService.MetadataKeys.Count();
-var list = projectService.MetadataKeys.Find(x => true);
+var inputchannel = new InputChannel("ic", true, "icic", "iiii");
+projectService.InputChannels.Add(inputchannel);
+var count = projectService.InputChannels.Count();
+var list = projectService.InputChannels.Find(x => true);
 
 
 

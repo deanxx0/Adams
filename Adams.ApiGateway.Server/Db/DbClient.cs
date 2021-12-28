@@ -19,6 +19,10 @@ namespace Adams.ApiGateway.Server.Db
         {
             return db.GetCollection<MetadataKey>("metadataKeys");
         }
+        public static IMongoCollection<InputChannel> InputChannels(this IMongoDatabase db)
+        {
+            return db.GetCollection<InputChannel>("inputChannels");
+        }
     }
     public class DbClient
     {
