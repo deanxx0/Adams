@@ -1,6 +1,7 @@
 ﻿using NAVIAIServices;
 using NAVIAIServices.Entities;
 using System.Collections;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -23,6 +24,32 @@ namespace Adams.Client
             try
             {
                 var res = _http.GetFromJsonAsync<int>($"/projects/count").Result;
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<Project> GetProjectPage(int pageNo, int perPage = 10)
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<List<Project>>($"/projects/{pageNo}/{perPage}").Result;
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Project GetProject(Project item)
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<Project>($"/projects/{item.Id}").Result;
                 return res;
             }
             catch (Exception)

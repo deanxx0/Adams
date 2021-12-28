@@ -13,12 +13,12 @@ namespace Adams.Client
     public class AdamsClient
     {
         public ProjectCollection Projects;
-        HttpClient _http;
+        public HttpClient _http;
 
-        public AdamsClient(string id, string pw)
+        public AdamsClient(string baseAddress, string id, string pw)
         {
             _http = new HttpClient();
-            _http.BaseAddress = new Uri("https://localhost:5000");
+            _http.BaseAddress = new Uri(baseAddress);
             if (!Login(id, pw))
                 throw new Exception("Login fali");
 

@@ -6,11 +6,15 @@ using System.Linq.Expressions;
 
 Thread.Sleep(3000);
 
-var adams = new AdamsClient("1", "1");
+var adams = new AdamsClient("https://localhost:5000", "1", "1");
 
-var project1 = new Project(NAVIAITypes.Mercury, "p1", "p1p1");
+//for(int i = 0; i < 32; i++)
+//{
+//    var project = new Project(NAVIAITypes.Mercury, $"p{i}", $"p{i}");
 
-adams.Projects.Add(project1);
+//    adams.Projects.Add(project);
+//}
+
 
 //var count = adams.Projects.GetCount();
 
@@ -22,6 +26,22 @@ adams.Projects.Add(project1);
 
 //adams.Projects.Clear();
 
-var projectService = new ProjectService(adams, project1);
+//var projectGet = adams.Projects.GetProject(project1);
+
+var projectPage = adams.Projects.GetProjectPage(1).ToList();
+
+//var projectService = new ProjectService(adams, projectGet);
+var projectService = Extensions.GetService(projectPage[0], adams);
+
+
+var metadatakey = new MetadataKey("m", "mm", MetadataTypes.String);
+projectService.MetadataKeys.Add(metadatakey);
+var count = projectService.MetadataKeys.Count();
+var list = projectService.MetadataKeys.Find(x => true);
+
+
+
+
+
 
 Console.WriteLine();

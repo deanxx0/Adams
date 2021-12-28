@@ -46,7 +46,7 @@ builder.Services.AddAuthorization(options =>
         ));
 });
 
-builder.Services.AddSingleton<DbCollection>();
+builder.Services.AddSingleton<DbClient>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -11,10 +11,10 @@ namespace Adams.ApiGateway.Server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        IMongoCollection<User> _users;
-        public UserController(DbCollection dbCollection)
+        DbClient _client;
+        public UserController(DbClient client)
         {
-            _users = dbCollection.users;
+            _client = client;
         }
 
         [HttpPost("users")]
@@ -39,35 +39,35 @@ namespace Adams.ApiGateway.Server.Controllers
                 UserClaim = userCreateDto.UserClaim,
             };
 
-            _users.InsertOne(newUser);
+            _client.Users.InsertOne(newUser);
             return Ok(newUser);
         }
 
         [HttpGet("users")]
         public async Task<IActionResult> Get()
         {
-            var res = _users.Find(x => true).ToList();
+            var res = _client.Users.Find(x => true).ToList();
             return Ok(res);
         }
 
         [HttpGet("users/{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var res = _users.Find(x => x.Id == id).FirstOrDefault();
+            var res = _client.Users.Find(x => x.Id == id).FirstOrDefault();
             return Ok(res);
         }
 
         [HttpPut("users")]
         public async Task<IActionResult> Update([FromBody]User user)
         {
-            _users.ReplaceOne(x => x.Id == user.Id, user);
+            _client.Users.ReplaceOne(x => x.Id == user.Id, user);
             return Ok(user);
         }
 
         [HttpDelete("users/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _users.DeleteOne(x => x.Id == id);
+            _client.Users.DeleteOne(x => x.Id == id);
             return Ok();
         }
     }

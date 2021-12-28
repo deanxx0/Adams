@@ -13,19 +13,19 @@ namespace Adams.ApiGateway.Server.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        IMongoCollection<User> _users;
+        DbClient _client;
         string _salt;
         
-        public LoginController(DbCollection dbCollection, IConfiguration configuration)
+        public LoginController(DbClient client, IConfiguration configuration)
         {
-            _users = dbCollection.users;
             _salt = configuration.GetValue<string>("Salt");
+            _client = client;
         }
 
         [HttpPost("login/{username}/{password}")]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = _users.Find(x => x.UserName == username).FirstOrDefault();
+            var user = _client.Users.Find(x => x.UserName == username).FirstOrDefault();
             if (user == null) return Unauthorized();
 
             var hasher = new PasswordHasher<string>();

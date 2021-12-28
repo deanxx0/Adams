@@ -11,10 +11,10 @@ namespace Adams.Client
 {
     public class ProjectService : IProjectService
     {
-        private AdamsClient client;
+        private HttpClient _http;
         public ProjectService(AdamsClient client, Project entity)
         {
-            this.client = client;
+            _http = client._http;
             this.Entity = entity;
         }
 
@@ -22,7 +22,7 @@ namespace Adams.Client
         public bool IsMultiChannel => throw new NotImplementedException();
         public IAugmentationService Augmentations => throw new NotImplementedException();
 
-        public IClassInfoService ClassInfos => throw new NotImplementedException();
+        public IClassInfoService ClassInfos => new ClassInfoService(_http, Entity);
 
         public IDatasetService Datasets => throw new NotImplementedException();
 
@@ -32,7 +32,7 @@ namespace Adams.Client
 
         public IMetadataValueService MetadataValues => throw new NotImplementedException();
 
-        public IMetadataKeyService MetadataKeys => throw new NotImplementedException();
+        public IMetadataKeyService MetadataKeys => new MetadataKeyService(_http, Entity);
 
         public IImageInfoService ImageInfos => throw new NotImplementedException();
 
