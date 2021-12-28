@@ -17,7 +17,8 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/metadatakeys")]
         public async Task<IActionResult> Add(string projectId, [FromBody] MetadataKey entity)
         {
-            var newMetadataKey = new MetadataKey(entity.Key, entity.Description== null ? "" : entity.Description, entity.Type, true);
+            var description = entity.Description ?? "";
+            var newMetadataKey = new MetadataKey(entity.Key, description, entity.Type, true);
             if (entity.Id != null)
                 newMetadataKey.SetId(entity.Id);
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();

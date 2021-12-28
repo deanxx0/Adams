@@ -17,8 +17,8 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/classinfos")]
         public async Task<IActionResult> Add(string projectId, [FromBody] ClassInfo classInfo)
         {
-            var description = classInfo.Description == null ? "" : classInfo.Description;
-            var key = classInfo.Key == null ? "None" : classInfo.Key;
+            var description = classInfo.Description ?? "";
+            var key = classInfo.Key ?? "None";
             var newClassInfo = new ClassInfo(classInfo.Name, description, key, classInfo.R, classInfo.G, classInfo.B, true);
             if(classInfo.Id != null)
                 newClassInfo.SetId(classInfo.Id);

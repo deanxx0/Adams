@@ -17,8 +17,8 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/inputchannels")]
         public async Task<IActionResult> Add(string projectId, [FromBody] InputChannel entity)
         {
-            var description = entity.Description == null ? "" : entity.Description;
-            var namingRegex = entity.NamingRegex == null ? "" : entity.NamingRegex;
+            var description = entity.Description ?? "";
+            var namingRegex = entity.NamingRegex ?? "";
             var newInputChannel = new InputChannel(entity.Name, entity.IsColor, description, namingRegex, true);
             if (entity.Id != null)
                 newInputChannel.SetId(entity.Id);
