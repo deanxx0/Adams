@@ -57,7 +57,15 @@ namespace Adams.ApiGateway.Server.Controllers
         public async Task<IActionResult> Update(string projectId, [FromBody] ClassInfo classInfoIn)
         {
             var classInfos = _client.GetProjectDB(projectId).ClassInfos();
-            classInfos.ReplaceOne(x => x.Id == classInfoIn.Id, classInfoIn);
+            var updateDefinition = Builders<ClassInfo>.Update
+                .Set(x => x.Name, classInfoIn.Name)
+                .Set(x => x.Description, classInfoIn.Description)
+                .Set(x => x.Key, classInfoIn.Key)
+                .Set(x => x.R, classInfoIn.R)
+                .Set(x => x.G, classInfoIn.G)
+                .Set(x => x.B, classInfoIn.B)
+                .Set(x => x.IsEnabled, classInfoIn.IsEnabled);
+            classInfos.UpdateOne(x => x.Id == classInfoIn.Id, updateDefinition);
             return Ok(classInfoIn);
         }
     }
