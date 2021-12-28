@@ -17,11 +17,11 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/classinfos")]
         public async Task<IActionResult> Add(string projectId, [FromBody] ClassInfo classInfo)
         {
-            var isEnabled = classInfo.IsEnabled == null ? true : classInfo.IsEnabled.Value;
-            var newClassInfo = classInfo.Id == null ?
-                new ClassInfo(classInfo.Name, classInfo.Description, classInfo.Key, classInfo.R, classInfo.G, classInfo.B, isEnabled) :
-                new ClassInfo(classInfo.Id, classInfo.Name, classInfo.Description, classInfo.Key, classInfo.R, classInfo.G, classInfo.B, isEnabled);
-
+            var description = classInfo.Description == null ? "" : classInfo.Description;
+            var key = classInfo.Key == null ? "None" : classInfo.Key;
+            var newClassInfo = new ClassInfo(classInfo.Name, description, key, classInfo.R, classInfo.G, classInfo.B, true);
+            if(classInfo.Id != null)
+                newClassInfo.SetId(classInfo.Id);
             var classInfos = _client.GetProjectDB(projectId).ClassInfos();
             classInfos.InsertOne(newClassInfo);
             return Ok(newClassInfo);

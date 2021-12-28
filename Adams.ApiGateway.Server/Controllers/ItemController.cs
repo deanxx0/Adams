@@ -17,14 +17,13 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/items")]
         public async Task<IActionResult> Add(string projectId, [FromBody] Item entity)
         {
-            var isEnabled = entity.IsEnabled == null ? true : entity.IsEnabled.Value;
-            var newEntity = entity.Id == null ?
-                new Item(entity.Tag, isEnabled) :
-                new Item(entity.Id, entity.Tag, isEnabled);
+            var newItem = new Item(entity.Tag, true, false);
+            if (entity.Id != null)
+                newItem.SetId(entity.Id);
 
             var items = _client.GetProjectDB(projectId).Items();
-            items.InsertOne(newEntity);
-            return Ok(newEntity);
+            items.InsertOne(newItem);
+            return Ok(newItem);
         }
 
         [HttpGet("projects/{projectId}/items/count")]

@@ -17,14 +17,14 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/inputchannels")]
         public async Task<IActionResult> Add(string projectId, [FromBody] InputChannel entity)
         {
-            var isEnabled = entity.IsEnabled == null ? true : entity.IsEnabled.Value;
-            var newEntity = entity.Id == null ?
-                new InputChannel(entity.Name, entity.IsColor, entity.Description, entity.NamingRegex, isEnabled) :
-                new InputChannel(entity.Id, entity.Name, entity.IsColor, entity.Description, entity.NamingRegex, isEnabled);
-
+            var description = entity.Description == null ? "" : entity.Description;
+            var namingRegex = entity.NamingRegex == null ? "" : entity.NamingRegex;
+            var newInputChannel = new InputChannel(entity.Name, entity.IsColor, description, namingRegex, true);
+            if (entity.Id != null)
+                newInputChannel.SetId(entity.Id);
             var inputChannels = _client.GetProjectDB(projectId).InputChannels();
-            inputChannels.InsertOne(newEntity);
-            return Ok(newEntity);
+            inputChannels.InsertOne(newInputChannel);
+            return Ok(newInputChannel);
         }
 
         [HttpGet("projects/{projectId}/inputchannels/count")]

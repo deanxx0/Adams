@@ -17,14 +17,12 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/metadatakeys")]
         public async Task<IActionResult> Add(string projectId, [FromBody] MetadataKey entity)
         {
-            var isEnabled = entity.IsEnabled == null ? true : entity.IsEnabled.Value;
-            var newEntity = entity.Id == null ?
-                new MetadataKey(entity.Key, entity.Description, entity.Type, isEnabled) :
-                new MetadataKey(entity.Id, entity.Key, entity.Description, entity.Type, isEnabled);
-
+            var newMetadataKey = new MetadataKey(entity.Key, entity.Description== null ? "" : entity.Description, entity.Type, true);
+            if (entity.Id != null)
+                newMetadataKey.SetId(entity.Id);
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
-            metadatakeys.InsertOne(newEntity);
-            return Ok(newEntity);
+            metadatakeys.InsertOne(newMetadataKey);
+            return Ok(newMetadataKey);
         }
 
         [HttpGet("projects/{projectId}/metadatakeys/count")]

@@ -20,10 +20,9 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects")]
         public async Task<IActionResult> Add([FromBody] Project project)
         {
-            var newProject = 
-                project.Id == null ? 
-                new Project(project.AIType, project.Name, project.Description) :
-                new Project(project.Id, project.AIType,project.Name, project.Description);
+            var newProject = new Project(project.AIType, project.Name, project.Description);
+            if (project.Id != null)
+                newProject.SetId(project.Id);
 
             _client.Projects.InsertOne(newProject);
             _client.GetProjectDB(newProject.Id).Projects().InsertOne(project);
