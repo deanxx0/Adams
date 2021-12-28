@@ -23,6 +23,10 @@ namespace Adams.ApiGateway.Server.Db
         {
             return db.GetCollection<InputChannel>("inputChannels");
         }
+        public static IMongoCollection<Item> Items(this IMongoDatabase db)
+        {
+            return db.GetCollection<Item>("items");
+        }
     }
     public class DbClient
     {

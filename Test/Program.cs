@@ -34,10 +34,10 @@ var projectPage = adams.Projects.GetProjectPage(1).ToList();
 var projectService = Extensions.GetService(projectPage[0], adams);
 
 
-var inputchannel = new InputChannel("ic", true, "icic", "iiii");
-projectService.InputChannels.Add(inputchannel);
-var count = projectService.InputChannels.Count();
-var list = projectService.InputChannels.Find(x => true);
+var item = new Item("tag");
+projectService.Items.Add(item);
+var count = projectService.Items.Count();
+var list = projectService.Items.Find(x => true);
 
 
 

@@ -28,7 +28,7 @@ namespace Adams.Client
 
         public IInputChannelService InputChannels => new InputChannelService(_http, Entity);
 
-        public IItemService Items => throw new NotImplementedException();
+        public IItemService Items => new ItemService(_http, Entity);
 
         public IMetadataValueService MetadataValues => throw new NotImplementedException();
 
