@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    public class ItemService : IItemService
+    public class TrainConfigurationService : ITrainConfigurationService
     {
         HttpClient _http;
         Project _project;
 
-        public ItemService(HttpClient http, Project project)
+        public TrainConfigurationService(HttpClient http, Project project)
         {
             _http = http;
             _project = project;
         }
 
-        public void Add(Item item)
+        public void Add(TrainConfiguration configuration)
         {
             try
             {
-                var res = _http.PostAsJsonAsync<Item>($"/projects/{_project.Id}/items", item).Result;
+                var res = _http.PostAsJsonAsync<TrainConfiguration>($"/projects/{_project.Id}/trainconfigurations", configuration).Result;
             }
             catch (Exception)
             {
@@ -37,7 +37,7 @@ namespace Adams.Client
         {
             try
             {
-                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/items/count").Result;
+                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/trainconfigurations/count").Result;
                 return res;
             }
             catch (Exception)
@@ -46,11 +46,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate)
+        public IEnumerable<TrainConfiguration> Find(Expression<Func<TrainConfiguration, bool>> predicate)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
+                var res = _http.GetFromJsonAsync<List<TrainConfiguration>>($"/projects/{_project.Id}/trainconfigurations").Result;
                 var findRes = res.AsQueryable().Where(predicate).ToList();
                 return findRes;
             }
@@ -60,11 +60,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate, int page, int perPage = 30)
+        public IEnumerable<TrainConfiguration> FindAll()
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items/{page}/{perPage}").Result;
+                var res = _http.GetFromJsonAsync<List<TrainConfiguration>>($"/projects/{_project.Id}/trainconfigurations").Result;
                 return res;
             }
             catch (Exception)
@@ -73,24 +73,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> FindAll()
+        public void Update(TrainConfiguration configuration)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Update(Item entity)
-        {
-            try
-            {
-                var res = _http.PutAsJsonAsync<Item>($"/projects/{_project.Id}/items", entity).Result;
+                var res = _http.PutAsJsonAsync<TrainConfiguration>($"/projects/{_project.Id}/trainconfigurations", configuration).Result;
             }
             catch (Exception)
             {

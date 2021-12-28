@@ -57,12 +57,7 @@ namespace Adams.ApiGateway.Server.Controllers
         public async Task<IActionResult> Update(string projectId, [FromBody] MetadataKey entity)
         {
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
-            var updateDefinition = Builders<MetadataKey>.Update
-                .Set(x => x.Type, entity.Type)
-                .Set(x => x.Key, entity.Key)
-                .Set(x => x.Description, entity.Description)
-                .Set(x => x.IsEnabled, entity.IsEnabled);
-            metadatakeys.UpdateOne(x => x.Id == entity.Id, updateDefinition);
+            metadatakeys.ReplaceOne(x => x.Id == entity.Id, entity);
             return Ok(entity);
         }
     }

@@ -27,6 +27,34 @@ namespace Adams.ApiGateway.Server.Db
         {
             return db.GetCollection<Item>("items");
         }
+        public static IMongoCollection<Augmentation> Augmentations(this IMongoDatabase db)
+        {
+            return db.GetCollection<Augmentation>("augmentations");
+        }
+        public static IMongoCollection<TrainConfiguration> TrainConfiguraitons(this IMongoDatabase db)
+        {
+            return db.GetCollection<TrainConfiguration>("trainConfigurations");
+        }
+        public static IMongoCollection<ImageInfo> ImageInfos(this IMongoDatabase db)
+        {
+            return db.GetCollection<ImageInfo>("imageInfos");
+        }
+        public static IMongoCollection<MetadataValue> MetadataValues(this IMongoDatabase db)
+        {
+            return db.GetCollection<MetadataValue>("metadataValues");
+        }
+        public static IMongoCollection<Label> Labels(this IMongoDatabase db)
+        {
+            return db.GetCollection<Label>("labels");
+        }
+        public static IMongoCollection<Train> Trains(this IMongoDatabase db)
+        {
+            return db.GetCollection<Train>("trains");
+        }
+        public static IMongoCollection<Dataset> Datasets(this IMongoDatabase db)
+        {
+            return db.GetCollection<Dataset>("datasets");
+        }
     }
     public class DbClient
     {

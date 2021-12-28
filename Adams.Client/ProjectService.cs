@@ -4,6 +4,7 @@ using NAVIAIServices.ProjectService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,28 +20,44 @@ namespace Adams.Client
         }
 
         public Project Entity { get; init; }
-        public bool IsMultiChannel => throw new NotImplementedException();
-        public IAugmentationService Augmentations => throw new NotImplementedException();
+        public bool IsMultiChannel => GetInputChannelCount();
+
+
+        private bool GetInputChannelCount()
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<int>($"/projects/{Entity.Id}/inputchannels/count").Result;
+                if (res > 1) return true;
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IAugmentationService Augmentations => new AugmentationService(_http, Entity);
 
         public IClassInfoService ClassInfos => new ClassInfoService(_http, Entity);
 
-        public IDatasetService Datasets => throw new NotImplementedException();
+        public IDatasetService Datasets => new DatasetService(_http, Entity);
 
         public IInputChannelService InputChannels => new InputChannelService(_http, Entity);
 
         public IItemService Items => new ItemService(_http, Entity);
 
-        public IMetadataValueService MetadataValues => throw new NotImplementedException();
+        public IMetadataValueService MetadataValues => new MetadataValueService(_http, Entity);
 
         public IMetadataKeyService MetadataKeys => new MetadataKeyService(_http, Entity);
 
-        public IImageInfoService ImageInfos => throw new NotImplementedException();
+        public IImageInfoService ImageInfos => new ImageInfoService(_http, Entity);
 
-        public ITrainConfigurationService TrainConfigurations => throw new NotImplementedException();
+        public ITrainConfigurationService TrainConfigurations => new TrainConfigurationService(_http, Entity);
 
-        public ITrainService Trains => throw new NotImplementedException();
+        public ITrainService Trains => new TrainService(_http, Entity);
 
-        public ILabelService Labels => throw new NotImplementedException();
+        public ILabelService Labels => new LabelService(_http, Entity);
 
         public void BeginTrans()
         {

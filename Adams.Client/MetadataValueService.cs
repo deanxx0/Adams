@@ -10,22 +10,21 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    public class ItemService : IItemService
+    public class MetadataValueService : IMetadataValueService
     {
         HttpClient _http;
         Project _project;
-
-        public ItemService(HttpClient http, Project project)
+        public MetadataValueService(HttpClient http, Project project)
         {
             _http = http;
             _project = project;
         }
 
-        public void Add(Item item)
+        public void Add(MetadataValue metadataValue)
         {
             try
             {
-                var res = _http.PostAsJsonAsync<Item>($"/projects/{_project.Id}/items", item).Result;
+                var res = _http.PostAsJsonAsync<MetadataValue>($"/projects/{_project.Id}/metadatavalues", metadataValue).Result;
             }
             catch (Exception)
             {
@@ -37,7 +36,7 @@ namespace Adams.Client
         {
             try
             {
-                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/items/count").Result;
+                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/metadatavalues/count").Result;
                 return res;
             }
             catch (Exception)
@@ -46,11 +45,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate)
+        public IEnumerable<MetadataValue> Find(Expression<Func<MetadataValue, bool>> predicate)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
+                var res = _http.GetFromJsonAsync<List<MetadataValue>>($"/projects/{_project.Id}/metadatavalues").Result;
                 var findRes = res.AsQueryable().Where(predicate).ToList();
                 return findRes;
             }
@@ -60,11 +59,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate, int page, int perPage = 30)
+        public IEnumerable<MetadataValue> FindAll()
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items/{page}/{perPage}").Result;
+                var res = _http.GetFromJsonAsync<List<MetadataValue>>($"/projects/{_project.Id}/metadatavalues").Result;
                 return res;
             }
             catch (Exception)
@@ -73,24 +72,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> FindAll()
+        public void Update(MetadataValue entity)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Update(Item entity)
-        {
-            try
-            {
-                var res = _http.PutAsJsonAsync<Item>($"/projects/{_project.Id}/items", entity).Result;
+                var res = _http.PutAsJsonAsync<MetadataValue>($"/projects/{_project.Id}/metadatavalues", entity).Result;
             }
             catch (Exception)
             {

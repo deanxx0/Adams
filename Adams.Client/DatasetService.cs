@@ -10,22 +10,21 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    public class ItemService : IItemService
+    public class DatasetService : IDatasetService
     {
         HttpClient _http;
         Project _project;
-
-        public ItemService(HttpClient http, Project project)
+        public DatasetService(HttpClient http, Project project)
         {
             _http = http;
             _project = project;
         }
 
-        public void Add(Item item)
+        public void Add(Dataset dataset)
         {
             try
             {
-                var res = _http.PostAsJsonAsync<Item>($"/projects/{_project.Id}/items", item).Result;
+                var res = _http.PostAsJsonAsync<Dataset>($"/projects/{_project.Id}/datasets", dataset).Result;
             }
             catch (Exception)
             {
@@ -37,7 +36,7 @@ namespace Adams.Client
         {
             try
             {
-                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/items/count").Result;
+                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/datasets/count").Result;
                 return res;
             }
             catch (Exception)
@@ -46,11 +45,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate)
+        public IEnumerable<Dataset> Find(Expression<Func<Dataset, bool>> predicate)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
+                var res = _http.GetFromJsonAsync<List<Dataset>>($"/projects/{_project.Id}/datasets").Result;
                 var findRes = res.AsQueryable().Where(predicate).ToList();
                 return findRes;
             }
@@ -60,11 +59,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate, int page, int perPage = 30)
+        public IEnumerable<Dataset> FindAll()
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items/{page}/{perPage}").Result;
+                var res = _http.GetFromJsonAsync<List<Dataset>>($"/projects/{_project.Id}/datasets").Result;
                 return res;
             }
             catch (Exception)
@@ -73,24 +72,11 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> FindAll()
+        public void Update(Dataset dataset)
         {
             try
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Update(Item entity)
-        {
-            try
-            {
-                var res = _http.PutAsJsonAsync<Item>($"/projects/{_project.Id}/items", entity).Result;
+                var res = _http.PutAsJsonAsync<Dataset>($"/projects/{_project.Id}/datasets", dataset).Result;
             }
             catch (Exception)
             {

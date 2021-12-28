@@ -28,16 +28,19 @@ var adams = new AdamsClient("https://localhost:5000", "1", "1");
 
 //var projectGet = adams.Projects.GetProject(project1);
 
-var projectPage = adams.Projects.GetProjectPage(1).ToList();
+//var projectPage = adams.Projects.GetProjectPage(1).ToList();
 
-//var projectService = new ProjectService(adams, projectGet);
-var projectService = Extensions.GetService(projectPage[0], adams);
+////var projectService = new ProjectService(adams, projectGet);
+//var projectService = Extensions.GetService(projectPage[0], adams);
 
 
-var item = new Item("tag");
-projectService.Items.Add(item);
-var count = projectService.Items.Count();
-var list = projectService.Items.Find(x => true);
+
+//var aug = new Augmentataion($"tag{i}");
+
+
+//var count = projectService.Items.Count();
+//var list = projectService.Items.Find(x => true);
+//var page = projectService.Items.Find(x => true, 2, 10);
 
 
 

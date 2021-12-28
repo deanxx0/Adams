@@ -57,13 +57,7 @@ namespace Adams.ApiGateway.Server.Controllers
         public async Task<IActionResult> Update(string projectId, [FromBody] InputChannel entity)
         {
             var inputChannels = _client.GetProjectDB(projectId).InputChannels();
-            var updateDefinition = Builders<InputChannel>.Update
-                .Set(x => x.Name, entity.Name)
-                .Set(x => x.Description, entity.Description)
-                .Set(x => x.IsColor, entity.IsColor)
-                .Set(x => x.NamingRegex, entity.NamingRegex)
-                .Set(x => x.IsEnabled, entity.IsEnabled);
-            inputChannels.UpdateOne(x => x.Id == entity.Id, updateDefinition);
+            inputChannels.ReplaceOne(x => x.Id == entity.Id, entity);
             return Ok(entity);
         }
     }

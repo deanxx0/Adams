@@ -10,22 +10,60 @@ using System.Threading.Tasks;
 
 namespace Adams.Client
 {
-    public class ItemService : IItemService
+    public class TrainService : ITrainService
     {
         HttpClient _http;
         Project _project;
-
-        public ItemService(HttpClient http, Project project)
+        public TrainService(HttpClient http, Project project)
         {
             _http = http;
             _project = project;
         }
 
-        public void Add(Item item)
+        public void Add(Train train)
         {
             try
             {
-                var res = _http.PostAsJsonAsync<Item>($"/projects/{_project.Id}/items", item).Result;
+                var res = _http.PostAsJsonAsync<Train>($"/projects/{_project.Id}/trains", train).Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<Train> Find(Expression<Func<Train, bool>> predicate)
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<List<Train>>($"/projects/{_project.Id}/trains").Result;
+                var findRes = res.AsQueryable().Where(predicate).ToList();
+                return findRes;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<Train> FindAll()
+        {
+            try
+            {
+                var res = _http.GetFromJsonAsync<List<Train>>($"/projects/{_project.Id}/trains").Result;
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void Update(Train train)
+        {
+            try
+            {
+                var res = _http.PutAsJsonAsync<Train>($"/projects/{_project.Id}/trains", train).Result;
             }
             catch (Exception)
             {
@@ -37,7 +75,7 @@ namespace Adams.Client
         {
             try
             {
-                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/items/count").Result;
+                var res = _http.GetFromJsonAsync<int>($"/projects/{_project.Id}/trains/count").Result;
                 return res;
             }
             catch (Exception)
@@ -46,56 +84,6 @@ namespace Adams.Client
             }
         }
 
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate)
-        {
-            try
-            {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                var findRes = res.AsQueryable().Where(predicate).ToList();
-                return findRes;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public IEnumerable<Item> Find(Expression<Func<Item, bool>> predicate, int page, int perPage = 30)
-        {
-            try
-            {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items/{page}/{perPage}").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public IEnumerable<Item> FindAll()
-        {
-            try
-            {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Update(Item entity)
-        {
-            try
-            {
-                var res = _http.PutAsJsonAsync<Item>($"/projects/{_project.Id}/items", entity).Result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        
     }
 }
