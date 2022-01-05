@@ -21,7 +21,8 @@ namespace Adams.Client
 
         public void UploadImage(IProjectService projectService, string origialPath, string itemId, string imageInfoId)
         {
-
+            // upload image to server
+            // add server image path to imageInfoId doc
         }
     }
 }

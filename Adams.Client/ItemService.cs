@@ -75,14 +75,17 @@ namespace Adams.Client
 
         public IEnumerable<Item> FindAll()
         {
-            try
+            var perPage = 20;
+            var totalCount = Count();
+            var pages = Math.Ceiling(totalCount / (double)perPage);
+
+            for (int i = 0; i < pages; i++)
             {
-                var res = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items").Result;
-                return res;
-            }
-            catch (Exception)
-            {
-                throw;
+                var items = _http.GetFromJsonAsync<List<Item>>($"/projects/{_project.Id}/items/{i + 1}/{perPage}").Result;
+                foreach (var item in items)
+                {
+                    yield return item;
+                }
             }
         }
 
