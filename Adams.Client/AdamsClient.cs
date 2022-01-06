@@ -13,6 +13,7 @@ namespace Adams.Client
     public class AdamsClient
     {
         public ProjectCollection Projects;
+        public StorageService Storages;
         public HttpClient _http;
 
         public AdamsClient(string baseAddress, string id, string pw)
@@ -23,6 +24,7 @@ namespace Adams.Client
                 throw new Exception("Login fali");
 
             Projects = new ProjectCollection(_http);
+            Storages = new StorageService(_http);
         }
 
         private bool Login(string id, string pw)

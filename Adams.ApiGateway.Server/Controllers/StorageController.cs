@@ -1,5 +1,6 @@
 ﻿using Adams.ApiGateway.Server.Db;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Adams.ApiGateway.Server.Controllers
@@ -14,7 +15,7 @@ namespace Adams.ApiGateway.Server.Controllers
             _client = client;
         }
 
-        [HttpPost("projects/{projectId}/items/{itemId}imageinfos/{imageInfo}/upload")]
+        [HttpPost("projects/{projectId}/items/{itemId}imageinfos/{imageInfoId}/upload")]
         public async Task<IActionResult> UploadImage(string projectId, string itemId, string imageInfoId, IFormFile file)
         {
             // projectid check
@@ -28,6 +29,12 @@ namespace Adams.ApiGateway.Server.Controllers
             var imageInfos = _client.GetProjectDB(projectId).ImageInfos();
             var imageInfo = imageInfos.Find(x => x.Id == imageInfoId).FirstOrDefault();
             if (imageInfo == null) return NotFound();
+            //original file name check
+            //var ori = Path.GetFileName(imageInfo.OriginalFilePath);
+            //var filename = file.FileName;
+            //if (ori != filename)
+            //    return BadRequest("Not matched file name");
+
             // file upload save
             try
             {
@@ -43,10 +50,13 @@ namespace Adams.ApiGateway.Server.Controllers
                     {
                         Directory.CreateDirectory($"{_storagePath}\\{projectId}\\");
                     }
+
                     using (FileStream fileStream = System.IO.File.Create(filePath))
                     {
                         file.CopyTo(fileStream);
                         fileStream.Flush();
+                        // add server image path to imageInfo
+                        imageInfo.SetValue("OriginalFilePath", filePath);
                         return Ok($"{_storagePath}\\{projectId}\\{imageInfoId}" + "." + fileType[1]);
                     }
                 }
@@ -61,8 +71,8 @@ namespace Adams.ApiGateway.Server.Controllers
             }
         }
 
-        [HttpGet("projects/{projectId}/items/{itemId}imageinfos/{imageInfo}/download/{downloadPath}")]
-        public async Task<IActionResult> DownloadImage(string projectId, string itemId, string imageInfoId, string downloadPath)
+        [HttpGet("projects/{projectId}/items/{itemId}imageinfos/{imageInfoId}/download")]
+        public async Task<IActionResult> DownloadImage(string projectId, string itemId, string imageInfoId)
         {
             // projectid check
             var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
