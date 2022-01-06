@@ -19,6 +19,7 @@ var item = items[0];
 var imageInfos = projectService.ImageInfos.FindAll().ToList();
 var imageInfo = imageInfos[0];
 
-adams.Storages.DownloadImage(projectService, item.Id, imageInfo.Id, @"D:\2022\adams\project\DownloadFileStorage");
+var downloadPath = @"D:\2022\adams\project\DownloadFileStorage";
+adams.Storages.DownloadImage(projectService, item.Id, imageInfo.Id, downloadPath);
 
 Console.WriteLine();
