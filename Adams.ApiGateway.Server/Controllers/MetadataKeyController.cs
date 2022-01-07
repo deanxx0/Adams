@@ -18,6 +18,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/metadatakeys")]
         public async Task<IActionResult> Add(string projectId, [FromBody] MetadataKey entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var description = entity.Description ?? "";
             var newMetadataKey = new MetadataKey(entity.Key, description, entity.Type, true);
             if (entity.Id != null)
@@ -30,6 +34,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/metadatakeys/count")]
         public async Task<IActionResult> Count(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
             var count = metadatakeys.CountDocuments(x => true);
             return Ok(count);
@@ -38,6 +46,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/metadatakeys/{pageNo}/{perPage}")]
         public async Task<IActionResult> Get(string projectId, int pageNo, int perPage)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             if (pageNo < 1) pageNo = 1;
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
             var res = metadatakeys.Find(x => true).Skip((pageNo - 1) * perPage).Limit(perPage).ToList();
@@ -48,6 +60,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/metadatakeys")]
         public async Task<IActionResult> Get(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
             var res = metadatakeys.Find(x => true).ToList();
             return Ok(res);
@@ -56,6 +72,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPut("projects/{projectId}/metadatakeys")]
         public async Task<IActionResult> Update(string projectId, [FromBody] MetadataKey entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var metadatakeys = _client.GetProjectDB(projectId).MetadataKeys();
             metadatakeys.ReplaceOne(x => x.Id == entity.Id, entity);
             return Ok(entity);

@@ -17,6 +17,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/augmentations")]
         public async Task<IActionResult> Add(string projectId, [FromBody] Augmentation entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var description = entity.Description ?? "";
             var newAugmentation = new Augmentation(
                 entity.Name,
@@ -52,6 +56,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/augmentations/count")]
         public async Task<IActionResult> Count(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var augmentations = _client.GetProjectDB(projectId).Augmentations();
             var count = augmentations.CountDocuments(x => true);
             return Ok(count);
@@ -60,6 +68,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/augmentations/{pageNo}/{perPage}")]
         public async Task<IActionResult> Get(string projectId, int pageNo, int perPage)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             if (pageNo < 1) pageNo = 1;
             var augmentations = _client.GetProjectDB(projectId).Augmentations();
             var res = augmentations.Find(x => true).Skip((pageNo - 1) * perPage).Limit(perPage).ToList();
@@ -70,6 +82,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/augmentations")]
         public async Task<IActionResult> Get(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var augmentations = _client.GetProjectDB(projectId).Augmentations();
             var res = augmentations.Find(x => true).ToList();
             return Ok(res);
@@ -78,6 +94,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPut("projects/{projectId}/augmentations")]
         public async Task<IActionResult> Update(string projectId, [FromBody] Augmentation entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var augmentations = _client.GetProjectDB(projectId).Augmentations();
             augmentations.ReplaceOne(x => x.Id == entity.Id, entity);
             return Ok(entity);

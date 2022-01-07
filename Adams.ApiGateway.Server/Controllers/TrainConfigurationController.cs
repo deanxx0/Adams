@@ -17,6 +17,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPost("projects/{projectId}/trainconfigurations")]
         public async Task<IActionResult> Add(string projectId, [FromBody] TrainConfiguration entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var description = entity.Description ?? "";
             var newTrainConfiguration = new TrainConfiguration(
                 entity.Name,
@@ -45,6 +49,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/trainconfigurations/count")]
         public async Task<IActionResult> Count(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var trainConfigurations = _client.GetProjectDB(projectId).TrainConfiguraitons();
             var count = trainConfigurations.CountDocuments(x => true);
             return Ok(count);
@@ -53,6 +61,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/trainconfigurations/{pageNo}/{perPage}")]
         public async Task<IActionResult> Get(string projectId, int pageNo, int perPage)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             if (pageNo < 1) pageNo = 1;
             var trainConfigurations = _client.GetProjectDB(projectId).TrainConfiguraitons();
             var res = trainConfigurations.Find(x => true).Skip((pageNo - 1) * perPage).Limit(perPage).ToList();
@@ -63,6 +75,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpGet("projects/{projectId}/trainconfigurations")]
         public async Task<IActionResult> Get(string projectId)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var trainConfigurations = _client.GetProjectDB(projectId).TrainConfiguraitons();
             var res = trainConfigurations.Find(x => true).ToList();
             return Ok(res);
@@ -71,6 +87,10 @@ namespace Adams.ApiGateway.Server.Controllers
         [HttpPut("projects/{projectId}/trainconfigurations")]
         public async Task<IActionResult> Update(string projectId, [FromBody] TrainConfiguration entity)
         {
+            // project id check
+            var project = _client.Projects.Find(x => x.Id == projectId).FirstOrDefault();
+            if (project == null) return NotFound("No project id");
+
             var trainConfigurations = _client.GetProjectDB(projectId).TrainConfiguraitons();
             trainConfigurations.ReplaceOne(x => x.Id == entity.Id, entity);
             return Ok(entity);
