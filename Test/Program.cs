@@ -12,7 +12,7 @@ var project = new Project(NAVIAITypes.Mercury, "p4", "desc");
 adams.Projects.Add(project);
 
 var projects = adams.Projects.GetProjectPage(1, 10).ToList();
-var projectService = Extensions.GetService(projects[1], adams); // p2
+var projectService = Extensions.GetService(projects[3], adams); // p3
 
 var classInfo = new ClassInfo("class1", "desc", "", 0, 0, 0);
 projectService.ClassInfos.Add(classInfo);
